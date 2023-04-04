@@ -5,29 +5,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import combineReducer from './store/index';
 
-const weight = 100;
+const reduxDevTool =
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 
-function reducer(state = weight, action) {
-  if (action.type === '증가') {
-    state += 1;
-    return state;
-  } else if (action.type === '감소') {
-    state -= 1;
-    return state;
-  } else {
-    return state;
-  }
-}
-
-let store = createStore(reducer);
+const rootReducer = createStore(combineReducer, reduxDevTool);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <Provider store={store}>
+    <Provider store={rootReducer}>
       <App />
     </Provider>
   </BrowserRouter>,

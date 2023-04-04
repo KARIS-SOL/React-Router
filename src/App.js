@@ -6,21 +6,24 @@ import Header from './components/Header';
 import NotFound from './components/NotFound';
 import BoardDetail from './components/BoardDetail';
 import TestRedux from './components/TestRedux';
+import ListContainer from './components/ListContainer';
 
 function App() {
   return (
     <div className="App">
-      <TestRedux />
+      <ListContainer />
+      {/* <TestRedux />
       <Header />
 
       <Routes>
         <Route path="/" element={<Header />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/test" element={<TestRedux />} />
+        <Route path="/test" element={<test />} />
+
         <Route path="/board" element={<Board />} />
         <Route path="/board/:boardID" element={<BoardDetail />} />
         <Route path="*" element={<NotFound />} />
-      </Routes>
+      </Routes> */}
     </div>
   );
 }
