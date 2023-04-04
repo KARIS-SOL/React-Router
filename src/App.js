@@ -2,26 +2,24 @@ import { Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 import Board from './components/Board';
 import Profile from './components/Profile';
+import Header from './components/Header';
+import NotFound from './components/NotFound';
+import BoardDetail from './components/BoardDetail';
+import TestRedux from './components/TestRedux';
 
 function App() {
   return (
     <div className="App">
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">홈으로 이동</Link>
-          </li>
-          <li>
-            <Link to="/profile">프로필 페이지로 이동</Link>
-          </li>
-          <li>
-            <Link to="/board">게시판 페이지로 이동</Link>
-          </li>
-        </ul>
-      </nav>
+      <TestRedux />
+      <Header />
+
       <Routes>
+        <Route path="/" element={<Header />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/test" element={<TestRedux />} />
         <Route path="/board" element={<Board />} />
+        <Route path="/board/:boardID" element={<BoardDetail />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

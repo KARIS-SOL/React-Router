@@ -1,5 +1,14 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import Header from './Header';
 
 export default function Profile() {
-  return <h1>Profile 페이지 입니다</h1>;
+  const weight = useSelector((state) => state);
+
+  return (
+    <>
+      <Header />
+      <h1>Profile 페이지 입니다! </h1>;
+    </>
+  );
 }
