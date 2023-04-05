@@ -1,23 +1,22 @@
-// redux 기초세팅 (창고에서 값만 꺼내옴)
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import combineReducer from './store/index';
+import rootReducer from './store';
+import { configureStore } from '@reduxjs/toolkit';
 
 const reduxDevTool =
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 
-const rootReducer = createStore(combineReducer, reduxDevTool);
+const store = configureStore({ reducer: rootReducer }, reduxDevTool);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <Provider store={rootReducer}>
+    <Provider store={store}>
       <App />
     </Provider>
   </BrowserRouter>,
