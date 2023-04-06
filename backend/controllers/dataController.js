@@ -1,4 +1,5 @@
-// 초기 상태 설정
+const mongoClient = require('./mongoConnect');
+
 const initState = {
   mbtiResult: '',
   page: 0, // 0: 인트로 페이지, 1 ~ n: 선택 페이지, n+1: 결과 페이지
@@ -127,72 +128,66 @@ const initState = {
     },
   },
 };
+// Redux 데이터를 최초 DB 에 넣어주는 컨트롤러
+const setData = async (req, res) => {
+  try {
+    const client = await mongoClient.connect();
+    const data = client.db('mbti').collection('data');
 
-const initStateEmpty = {
-  mbtiResult: '',
-  page: 0,
-  survey: [],
-  explanation: {},
+    await data.insertOne(initState);
+    res.status(200).json('데이터 추가 성공!');
+  } catch (err) {
+    console.err(err);
+    res.status(500).json('데이터 삽입 실패, 알 수 없는 문제발생');
+  }
 };
 
-// Action Type 설정
-const INIT = 'mbti/INIT';
-const CHECK = 'mbti/CHECK';
-const NEXT = 'mbti/NEXT';
-const RESET = 'mbti/RESET';
+// Redux 데이터를 가져오는 컨트롤러
 
-// Action 생성 함수 설정
-export function init(data) {
-  return {
-    type: INIT,
-    payload: data,
-  };
-}
+const getData = async (req, res) => {
+  try {
+    const client = await mongoClient.connect();
+    const data = client.db('mbti').collection('data');
 
-export function check(result) {
-  return {
-    type: CHECK,
-    payload: { result },
-  };
-}
-
-export function next() {
-  return {
-    type: NEXT,
-  };
-}
-
-export function reset() {
-  return {
-    type: RESET,
-  };
-}
-
-export default function mbti(state = initStateEmpty, action) {
-  switch (action.type) {
-    case INIT:
-      return {
-        ...state,
-        survey: action.payload.survey,
-        explanation: action.payload.explanation,
-      };
-    case CHECK:
-      return {
-        ...state,
-        mbtiResult: state.mbtiResult + action.payload.result,
-      };
-    case NEXT:
-      return {
-        ...state,
-        page: state.page + 1,
-      };
-    case RESET:
-      return {
-        ...state,
-        page: 0,
-        mbtiResult: '',
-      };
-    default:
-      return state;
+    const mbtiData = await data.find({}).toArray();
+    res.status(200).json(mbtiData);
+  } catch (err) {
+    console.err(err);
+    res.status(500).json('데이터 삽입 실패, 알 수 없는 문제발생');
   }
-}
+};
+
+// 방문자 수를 구하는 컨트롤러
+const getCounts = async (req, res) => {
+  try {
+    const client = await mongoClient.connect();
+    const countDB = client.db('mbti').collection('count');
+
+    const count = await countDB.findOne({ id: 1 });
+    res.status(200).json(count);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json('방문자수 가져오기 실패, 알 수 없는 문제발생');
+  }
+};
+
+// 방문자수를 + 1 시켜주는 컨트롤러
+const incCounts = async (req, res) => {
+  try {
+    const client = await mongoClient.connect();
+    const countDB = client.db('mbti').collection('count');
+
+    await countDB.updateOne({ id: 1 }, { $inc: { count: +1 } });
+    res.status(200).json('방문자수 업데이트 성공!');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json('방문자 수 업데이트 실패, 알 수 없는 문제발생');
+  }
+};
+
+module.exports = {
+  setData,
+  getData,
+  getCounts,
+  incCounts,
+};

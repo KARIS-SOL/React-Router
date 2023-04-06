@@ -1,14 +1,14 @@
 import React from 'react';
 import Button from './Button';
 
-export default function SkyblueButton({ text, clickEvent }) {
+export default function PinkButton({ text, clickEvent }) {
   return (
     <Button
       text={text}
       clickEvent={clickEvent}
-      mainColor="#7edcfa"
-      subColor="#3a82e0"
-      hoverColor="#CFECF2"
+      mainColor="#f9c4d2"
+      subColor="#b18597"
+      hoverColor="#ffe9"
     />
   );
 }
